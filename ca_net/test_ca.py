@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # coding=utf-8
 
-
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 
@@ -32,12 +31,16 @@ if __name__ ==('__main__'):
     print(ca_net)
 
     virtual_control = np.array([[15], [0], [0], [0]], dtype = np.float32)
-    # virtual_control = np.array([15, 0, 0, 0], dtype = np.float32)
     
     virtual_control = torch.from_numpy(virtual_control)
     virtual_control = virtual_control.to('cpu').t()
     print(virtual_control)
 
     control_value = ca_net(virtual_control)
-
     print(control_value)
+
+    matrix_ts = torch.from_numpy(matrix)
+
+    virtual_control_act_ts = matrix_ts @ control_value.t()
+    print("desired virtual control", virtual_control, "actual virtual control", virtual_control_act_ts.t())
+    

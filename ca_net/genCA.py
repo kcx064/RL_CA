@@ -47,25 +47,35 @@ class Mydataset(Dataset):
 
  
 '''定义训练函数'''
-def train(dataloader, model, loss_fn, optimizer):
-    model.train()
-    pbar = tqdm(dataloader, desc="Training")
-    # 记录优化次数
-    # num=1
-    for X,y in pbar:
-        X,y = X.to(device),y.to(device)
-        # 自动初始化权值w
-        pred = model.forward(X)
-        loss = loss_fn(pred,y) # 计算损失值
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-        loss_value = loss.item()
-        # print(f'loss:{loss_value},[numbes]:{num}')
-        # num += 1
-        # 使用set_postfix在进度条末尾显示当前损失
-        pbar.set_postfix({'loss': f'{loss_value:.8f}'})
+# def train(dataloader, model, loss_fn, optimizer):
+#     model.train()
+#     pbar = tqdm(dataloader, desc="Training")
+#     # 记录优化次数
+#     # num=1
+#     for X,y in pbar:
+#         X,y = X.to(device),y.to(device)
+#         # 自动初始化权值w
+#         pred = model.forward(X)
+#         loss = loss_fn(pred,y) # 计算损失值
+#         optimizer.zero_grad()
+#         loss.backward()
+#         optimizer.step()
+#         loss_value = loss.item()
+#         pbar.set_postfix({'loss': f'{loss_value:.8f}'})
 
+def train(dataloader, model, loss_fn, optimizer, num_epochs=2):
+    model.train()
+    for epoch in range(num_epochs):
+        pbar = tqdm(dataloader, desc=f"Epoch {epoch+1}/{num_epochs}")
+        for X, y in pbar:
+            X, y = X.to(device), y.to(device)
+            pred = model(X)  # 也可以使用 model.forward(X)，但通常直接调用 model(X) 更简洁
+            loss = loss_fn(pred, y)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            loss_value = loss.item()
+            pbar.set_postfix({'loss': f'{loss_value:.8f}'})
 '''
 主函数
 '''
@@ -88,7 +98,7 @@ if __name__ ==('__main__'):
     datasets = Mydataset(my_target, my_input)
 
     # train_dataloader = DataLoader(datasets) 
-    train_dataloader = DataLoader(datasets, batch_size=4, num_workers=2) 
+    train_dataloader = DataLoader(datasets, batch_size=8, num_workers=4) 
 
     # for i, (input_data, target) in enumerate(train_dataloader):
     #     print('')
