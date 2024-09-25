@@ -15,6 +15,7 @@ parser.add_argument('--min_size', type=int, default=200, help='经验池超过20
 parser.add_argument('--batch_size', type=int, default=64, help='每次训练64组样本')
 parser.add_argument('--sigma', type=int, default=0.01, help='高斯噪声标准差')
 parser.add_argument('--filename', type=str, default="./test3", help='文件名前缀')
+parser.add_argument('--train_mode', type=bool, default=False, help='是否训练')
 
 # 参数解析
 args=parser.parse_args()
