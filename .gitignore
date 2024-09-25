@@ -2,3 +2,6 @@ __pycache__/*
 ddpg/__pycache__/*
 *.onnx
 *.pt
+*.pth
+simfz80/__pycache__/*
+db_ca_net/__pycache__/*
